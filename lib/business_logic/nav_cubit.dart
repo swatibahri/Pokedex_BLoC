@@ -9,7 +9,7 @@ class NavCubit extends Cubit<int> {
 
   void showPokemonDetails(int pokemonId) {
     print(pokemonId);
-    pokemonDetailsCubit.getPokemonDetails(pokemonId.toString());
+    pokemonDetailsCubit.getPokemonDetails(pokemonId);
     emit(pokemonId);
   }
 

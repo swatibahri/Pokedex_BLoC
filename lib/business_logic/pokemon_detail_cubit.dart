@@ -8,10 +8,11 @@ class PokemonDetailsCubit extends Cubit<PokeDetail> {
 
   PokemonDetailsCubit() : super(null);
 
-  void getPokemonDetails(String pokemonId) async {
+  void getPokemonDetails(int pokemonId) async {
+    print('dhhj');
     final responses =
-        await Future.wait([_pokemonRepository.getPokemonDetail()]);
-
+        await Future.wait([_pokemonRepository.getPokemonDetail(pokemonId)]);
+  print('dhhujgj');
     final pokemonInfo = responses as PokeDetail;
 
     emit(PokeDetail(

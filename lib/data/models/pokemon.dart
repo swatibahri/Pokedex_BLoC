@@ -2,7 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
+@JsonSerializable()
 class Pokemon {
   String name;
   String url;
@@ -22,7 +24,7 @@ class Pokemon {
     name = json['name'];
     url = json['url'];
     color = getColor();
-    id = paths[paths.length - 2];
+    id = int.parse(paths[paths.length - 2]);
   }
 
   Map<String, dynamic> toJson() {
@@ -36,18 +38,20 @@ class Pokemon {
 }
 
 class PokemonPageResponse {
-  final List<Pokemon> pokemonListings;
+  final List <Pokemon> pokemonListings;
   final bool canLoadNextPage;
 
   PokemonPageResponse(
       {@required this.pokemonListings, @required this.canLoadNextPage});
 
-  factory PokemonPageResponse.fromJson(Map<String, dynamic> json) {
-    //print('listing');
-    final canLoadNextPage = json['next'] != null;
-    final pokemonListings = (json['results'] as List)
+  factory PokemonPageResponse.fromJson(Map<String, dynamic> parsedJson) {
+    print('listing');
+    final canLoadNextPage = parsedJson['next'] != null;
+    print('shhs');
+    final pokemonListings = (parsedJson['results'] as List)
         .map((listingJson) => Pokemon.fromJson(listingJson))
         .toList();
+        print('dshdh');
 
     return PokemonPageResponse(
         pokemonListings: pokemonListings, canLoadNextPage: canLoadNextPage);

@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart';
 
-import 'package:kt_dart/collection.dart';
 import 'package:pokedex/data/models/poke_detail.dart';
 import 'package:pokedex/data/models/pokemon.dart';
 
@@ -12,10 +11,8 @@ class PokeAPI {
   final Client _client = Client();
   final successCode = 200;
 
-  Uri pokemonListUri() {}
-
-  Uri pokemonDetailUri(String pokemonName) {
-    return Uri.https(pokemonAuthority, '$pokeApiBase/pokemon/$pokemonName');
+  Uri pokemonDetailUri(int pokemonId) {
+    return Uri.https(pokemonAuthority, '$pokeApiBase/pokemon/$pokemonId');
   }
 
   // Future<KtList<Pokemon>> getPokemonList([int offset = 0]) async {
@@ -50,16 +47,21 @@ class PokeAPI {
 
     final response = await _client.get(uri);
 
-    final decoded = jsonDecode(response.body);
-    final results = decoded['results'];
+    // final decoded = jsonDecode(response.body);
+    // final results = decoded['results'];
+    final decoded = json.decode(response.body);
 
-    // final response = await client.get(uri);
-    // final json = jsonDecode(response.body);
+    // var map1 = Map.fromIterable(results, key: (e) => e.id, value: (e) => e.url);
+    // print(results[0]);
+    return PokemonPageResponse.fromJson(decoded);
+    // print(results.runtimeType);
 
-    return PokemonPageResponse.fromJson(results);
+    // print(results.map((job) => new PokemonPageResponse.fromJson(job)));
+
+    // return results.map((job) => new PokemonPageResponse.fromJson(job));
   }
 
-  Future<PokeDetail> getPokemonDetail([String pokemonName = 'pikachu']) async {
+  Future<PokeDetail> getPokemonDetail([pokemonId]) async {
     // if (response.statusCode == successCode) {
     //   return PokeDetail.fromJson(decoded);
     // } else {
@@ -67,8 +69,7 @@ class PokeAPI {
     // }
     //
     try {
-      final Response response =
-          await _client.get(pokemonDetailUri(pokemonName));
+      final Response response = await _client.get(pokemonDetailUri(pokemonId));
       final decoded = jsonDecode(response.body);
       return PokeDetail.fromJson(decoded);
     } catch (e) {

@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pokedex/business_logic/nav_cubit.dart';
 import 'package:pokedex/business_logic/pokemon_bloc.dart';
 import 'package:pokedex/business_logic/pokemon_state.dart';
+import 'package:pokedex/config.dart';
 import 'package:pokedex/presentation/widgets/add_new_pokemon.dart';
+import 'package:pokedex/presentation/widgets/pokemon_card.dart';
 import '../widgets/sidemenu.dart';
 import '../../data/models/pokemon.dart';
 
@@ -100,22 +102,46 @@ class _HomeState extends State<Home> {
                   //   controller: _scrollController,
                   // slivers: <Widget>[
                   //   SliverGrid
+
                   return GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 1.0,
                     ),
                     itemCount: state.pokemonListings.length,
+
                     itemBuilder: (context, index) {
                       return GestureDetector(
-                        onTap: () => BlocProvider.of<NavCubit>(context)
-                            .showPokemonDetails(
-                                state.pokemonListings[index].id),
+                      
+                        onTap: () {
+                        
+                          BlocProvider.of<NavCubit>(context)
+                             .showPokemonDetails(                  
+                             state.pokemonListings[index].id,
+
+                          );
+                        },
+                        // child:PokemonCard(
+
+                        //   id: item.id,
+                        //   image: getPokemonImage(state.pokemonListings[index].id),
+                        //   name: item.name,
+                        //   color: item.color,
+                        //   key: ValueKey(item.id),
+                        //   onTap: () {
+                        //     Navigator.pushNamed(context, '/detail', arguments: {
+                        //       'id': item.id,
+                        //       'name': item.name,
+                        //       'image': getPokemonImage(item.id)
+                        //     });
+                        //      }),
                         child: Card(
                           child: GridTile(
                             child: Column(
                               children: [
-                                Image.network(state.pokemonListings[index].url),
+                                Image.network(getPokemonImage(
+                                    state.pokemonListings[index].id)),
+                                //Image.network(getPokemonImage(state)),
                                 Text(state.pokemonListings[index].name)
                               ],
                             ),
